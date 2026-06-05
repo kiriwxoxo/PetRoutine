@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>PetRoutine | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f4f4f9; padding: 20px; }
+        .card { margin-bottom: 15px; border-left: 5px solid #0d6efd; }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <h2>🐾 Мої вихованці (Сім'я: Верховецькі)</h2>
+    <div id="pets-container" class="row">
+        <p>Завантаження списку собак...</p>
+    </div>
+</div>
+
+<script>
+    // Запит до нашого нового API
+    fetch('/api/v1/families/1/pets')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('pets-container');
+            container.innerHTML = ''; // Очищаємо текст завантаження
+
+            data.forEach(pet => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4';
+                card.innerHTML = `
+                    <div class="card p-3 shadow-sm">
+                        <h4>${pet.name}</h4>
+                        <p>Порода: ${pet.breed}</p>
+                        <button class="btn btn-outline-primary btn-sm">Переглянути активність</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        })
+        .catch(error => console.error('Помилка:', error));
+</script>
+</body>
+</html>
